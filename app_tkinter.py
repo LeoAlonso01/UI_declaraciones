@@ -42,7 +42,7 @@ end_year_combobox.grid(row=1, column=2, padx=10, pady=10)
 end_year_combobox.set(datetime.now().strftime("%Y"))
 
 # Crear un botón
-button = tk.Button(root, text="Mostrar Fechas", command=on_button_click)
+button = tk.Button(root, text="Mostrar Fechas:", command=on_button_click)
 button.grid(row=2, column=0, columnspan=3, pady=10)
 
 # Crear una etiqueta para mostrar las fechas seleccionadas
