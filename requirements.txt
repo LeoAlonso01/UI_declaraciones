@@ -8,8 +8,8 @@ pymongo==4.4.1
 python-dateutil==2.8.2
 python-docx==0.8.11
 pytz==2023.3
-pywin32==306
+pywin32
 six==1.16.0
 tqdm==4.66.1
 tzdata==2023.3
-aspose-words==23.8.0
+# aspose-words==23.8.0
