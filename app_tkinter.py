@@ -7,6 +7,7 @@ def on_button_click():
     start_year = start_year_combobox.get()
     end_month = end_month_combobox.get()
     end_year = end_year_combobox.get()
+    print(f"Fecha de inicio: {start_year}-{start_month} - {start_year} - {start_month} - Fecha de fin: {end_year}-{end_month}")
     label.config(text=f"Fecha de inicio: {start_year}-{start_month}\n Fecha de fin: {end_year}-{end_month}")
 
 # Crear la ventana principal

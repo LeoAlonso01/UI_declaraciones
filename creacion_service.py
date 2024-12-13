@@ -4,12 +4,13 @@ import json
 import os
 import datetime
 
-# importar las variables de entorno
-os.environ['DECLARA_DB_NAME'] = 'declaranet'
-os.environ['DECLARA_HOST'] = "148.216.25.182"
-os.environ['DECLARA_PASSWORD'] = "c0ntr4l0r14"
-os.environ['DECLARA_PORT'] = '27017'
-os.environ['DECLARA_USERNAME'] = 'declaranetusr'
+from conexion import uri
+
+DB_NAME = os.environ['DB_NAME']
+HOST = os.environ.get('HOST') #dirección del host donde se encuentra la base de datos
+PASSWORD = os.environ.get('PASSWORD') #contraseña para autenticarse en la base de datos
+PORT = os.environ.get('PORT') #puerto por defecto para MongoDB
+USERNAME = os.environ.get('USERNAME') #nombre de usuario para autenticarse en la base de datos
 
 # Función para "aplanar" un diccionario anidado, convirtiendo las claves anidadas en claves únicas
 def flat_dict(d, parent_key='',sep='_'):
@@ -22,10 +23,19 @@ def flat_dict(d, parent_key='',sep='_'):
             items[new_key] = v #añade el valor al diccionario
     return items #retorna el diccionario con las claves aplanadas
 
-# conexion con la bd de mongo 
-DB_NAME = os.environ.get('DECLARA_DB_NAME') #nombre de la base de datos
-HOST = os.environ.get('DECLARA_HOST') #dirección del host donde se encuentra la base de datos
-PASSWORD = os.environ.get('DECLARA_PASSWORD') #contraseña para autenticarse en la base de datos
-PORT = int(os.environ.get('DECLARA_PORT')) #puerto por defecto para MongoDB
-USERNAME = os.environ.get('DECLARA_USERNAME') #nombre de usuario para autenticarse en la base de datos
+# selecciona la bd y la coleccion
+client = MongoClient(uri)
+db = client[DB_NAME]
+collection = db['datosPublicos100']  # Nombre de la colección donde se realizará la consulta
 
+# Define the variable 'fechas'
+fechas = ["2024-12"]  # Example dates, replace with actual dates
+# Ejecuta la consulta de agregación en la colección usando con el json en crudo para modificar sus variables
+with open('pipeline.json', 'r') as file: # Abre el archivo JSON en modo de lectura
+    pipeline = json.load(file) # Carga el archivo JSON con el pipeline de agregación
+    # pipeline[0]['$match']['fecha'] = {"$in": fechas}
+cursor = collection.aggregate(pipeline) # Ejecuta la consulta de agregación en la colección
+# Convierte los resultados de la consulta en una lista
+lista = list(cursor) # Convierte los resultados de la consulta en una lista
+df = pd.DataFrame(lista) # Convierte la lista de resultados en un DataFrame de pandas
+print(df) # Imprime el DataFrame
