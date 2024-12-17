@@ -14,13 +14,6 @@ PORT = os.getenv("PORT")
 USERNAME = os.getenv("USERNAME")
 PASSWORD = os.getenv("PASSWORD")
 
-# Validar las variables cargadas
-print("DB_NAME:", DB_NAME)
-print("HOST:", HOST)
-print("PORT:", PORT)
-print("USERNAME:", USERNAME)
-print("PASSWORD:", PASSWORD)
-
 try:
     # Asegurarse de que PORT es un número válido
     if not PORT.isdigit():
@@ -32,15 +25,12 @@ try:
     PASSWORD_ESCAPED = quote_plus(PASSWORD)
 
     # Crear la URI de conexión
-    uri = f"mongodb://{USERNAME}:{PASSWORD}@{PORT}:{PORT}/{DB_NAME}"
+    uri = f"mongodb://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}"
     
     # Conectar a MongoDB
     client = MongoClient(uri)
     db = client[DB_NAME]  # Seleccionar la base de datos
     collection = db['datosPublicos100']  # Nombre de la colección
-    print(client)
-    print(db)
-    print(collection)
     print("Conexión exitosa")
 except Exception as e:
     print("Error de conexión:", e)
