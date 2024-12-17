@@ -1,20 +1,46 @@
-from pymongo import MongoClient
+
+from dotenv import load_dotenv
 import os
+from pymongo import MongoClient
+from urllib.parse import quote_plus
 
-# conexion con la bd de mongo 
-DB_NAME = os.environ.get('DB_NAME') #nombre de la base de datos
-HOST = os.environ.get('HOST') #dirección del host donde se encuentra la base de datos
-PASSWORD = os.environ.get('PASSWORD') #contraseña para autenticarse en la base de datos
-PORT = os.environ.get('PORT') #puerto por defecto para MongoDB
-USERNAME = os.environ.get('USERNAME') #nombre de usuario para autenticarse en la base de datos
+# Cargar el archivo .env.local
+load_dotenv(dotenv_path=".env.local")
 
-print(PORT)
-# intenton de conexion a la bd
+# Obtener variables de entorno
+DB_NAME = os.getenv("DB_NAME")
+HOST = os.getenv("HOST")
+PORT = os.getenv("PORT")
+USERNAME = os.getenv("USERNAME")
+PASSWORD = os.getenv("PASSWORD")
+
+# Validar las variables cargadas
+print("DB_NAME:", DB_NAME)
+print("HOST:", HOST)
+print("PORT:", PORT)
+print("USERNAME:", USERNAME)
+print("PASSWORD:", PASSWORD)
+
 try:
-    uri = f"mongodb://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}" #crea la URI de conexión para MongoDB
-    client = MongoClient(host=HOST, port=PORT, username=USERNAME, password=PASSWORD) #crea una instancia de MongoClient
-    client2 = MongoClient(uri) #crea una instancia de MongoClient
-    db = client[DB_NAME] #selecciona la base de datos
+    # Asegurarse de que PORT es un número válido
+    if not PORT.isdigit():
+        raise ValueError(f"PORT contiene caracteres no válidos: {PORT}")
+    PORT = int(PORT)
+
+    # Codificar USERNAME y PASSWORD
+    USERNAME_ESCAPED = quote_plus(USERNAME)
+    PASSWORD_ESCAPED = quote_plus(PASSWORD)
+
+    # Crear la URI de conexión
+    uri = f"mongodb://{USERNAME}:{PASSWORD}@{PORT}:{PORT}/{DB_NAME}"
+    
+    # Conectar a MongoDB
+    client = MongoClient(uri)
+    db = client[DB_NAME]  # Seleccionar la base de datos
+    collection = db['datosPublicos100']  # Nombre de la colección
+    print(client)
+    print(db)
+    print(collection)
     print("Conexión exitosa")
 except Exception as e:
     print("Error de conexión:", e)

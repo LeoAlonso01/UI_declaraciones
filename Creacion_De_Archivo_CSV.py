@@ -22,11 +22,11 @@ def flatten_dict(d, parent_key='', sep='_'):
     return items
 
 # Configuración de la conexión a la base de datos MongoDB
-DB_NAME = "declaranet"            # Nombre de la base de datos
-HOST = "148.216.25.182"           # Dirección del host donde se encuentra la base de datos
-PASSWORD = "c0ntr4l0r14"          # Contraseña para autenticarse en la base de datos
-PORT = 27017                      # Puerto por defecto para MongoDB
-USERNAME = "declaranetusr"        # Nombre de usuario para autenticarse en la base de datos
+DB_NAME = "declaranet"            
+HOST = "148.216.25.182"           
+PASSWORD = "c0ntr4l0r14"          
+PORT = 27017                      
+USERNAME = "declaranetusr"        
 
 # Creación de la URI de conexión para MongoDB
 uri = f"mongodb://{USERNAME}:{PASSWORD}@{HOST}:{PORT}/{DB_NAME}"
